@@ -1,16 +1,13 @@
 package model.order;
 
-import constantes.Constantes;
 import model.Productos;
-
-import java.util.ArrayList;
 
 public class OrdenItem {
 
     // Atributos de Order Item
     private final Productos producto;
-    private int cantidadDeProductos;
-    //private ArrayList<Constantes.ToppingsBebidas> toppingsBebida = new ArrayList<>();
+    private int unidadesDeProductos = 1;
+    private float costoTotal;
 
     // Constructor
     public OrdenItem(Productos producto) {
@@ -24,23 +21,18 @@ public class OrdenItem {
     }
 
     // Getters y Setters de cantidadDeProducto y toppings ya sea de bebida o comida
-    public int getCantidadDeProductos() {
-        return cantidadDeProductos;
+    public int getUnidadesDeProductos() {
+        return unidadesDeProductos;
+    }
+    public void setUnidadesDeProductos(int unidadesDeProductos) {
+        this.unidadesDeProductos = unidadesDeProductos;
     }
 
-    public void setCantidadDeProductos(int cantidadDeProductos) {
-        this.cantidadDeProductos = cantidadDeProductos;
-    }
 
-    /*
-    public ArrayList<Constantes.ToppingsBebidas> getToppingsBebida() {
-        return toppingsBebida;
-    }
-    */
 
 
     public float getCostoItem(){
-        return producto.getCosto()*cantidadDeProductos;
+        return producto.getCosto()* unidadesDeProductos;
     }
 
 }

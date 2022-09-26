@@ -1,13 +1,14 @@
 package ui;
 
+import com.sun.xml.internal.bind.v2.model.core.EnumConstant;
+import constantes.Constantes;
 import model.Productos;
-import model.bebidas.Cafe;
-import model.bebidas.CafeClasico;
-import model.bebidas.CafeDeMetodo;
+import model.bebidas.Bebida;
+import model.comida.Comida;
 import model.order.OrdenItem;
 
-import static ui.CreacionDeProductos.*;
 import constantes.Constantes.*;
+import model.order.OrderList;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -15,41 +16,30 @@ import java.util.Scanner;
 
 public class UIMenu {
 
-    private static ArrayList<OrdenItem> orderList = new ArrayList<>();
+    public static ArrayList<Productos> menu = new ArrayList<>();
+    static OrderList listaDePedido = new OrderList();
 
     public static void showMenu() {
 
         int response = 0;
         int indexAllOrderLists = 0;
 
-
+        // Bienvenida y despliegue de productos
         System.out.println("## Bienvenido a  Cachito de Coco Cafe ##");
-        System.out.println("\nPor favor selecciona tu producto deseado");
-        imprimirOpcionesMenu();
-        Scanner scanner = new Scanner(System.in);
-        response = Integer.parseInt(scanner.nextLine());
-        switch (response){
-            case 1:
-                imprimirOpcionesDeBebida(cafesClasicos.get(CaracteristicasDeCafe.AMERICANO.toString()));
-                break;
-            case 2:
-                imprimirOpcionesDeBebida(cafesClasicos.get(CaracteristicasDeCafe.CAPPUCCINO.toString()));
-                break;
-            case 3:
-                imprimirOpcionesDeBebida(cafesClasicos.get(CaracteristicasDeCafe.ESPRESSO.toString()));
-                break;
-            case 4:
-                imprimirOpcionesDeBebida(cafesDeMetodo.get(CaracteristicasDeCafe.ARABIC.toString()));
-                break;
-            case 5:
-                imprimirOpcionesDeBebida(cafesDeMetodo.get(CaracteristicasDeCafe.CHEMEX.toString()));
-                break;
-            case 6:
-                imprimirOpcionesDeBebida(cafesDeMetodo.get(CaracteristicasDeCafe.COLDBREW.toString()));
-                break;
-            default:
-                System.out.println("Introduce opcion valida");
-        }
+        System.out.println("\nPor favor selecciona tu producto deseado\n");
+
+
+        do {
+            imprimirOpcionesMenu();
+            Scanner scanner = new Scanner(System.in);
+            response = Integer.parseInt(scanner.nextLine());
+            listaDePedido.addOrderItem(response);
+            listaDePedido.imprimirOpcionesDeBebida();
+        } while (quiereOtroProducto());
+
+
+        listaDePedido.imprimirOrderList();
+
 
 
 
@@ -58,131 +48,59 @@ public class UIMenu {
     private static void imprimirOpcionesMenu(){
         int contador = 1;
 
-        // Impresion de Cafes clasicos
-        System.out.println("-- Cafe Clasico --");
-        for (CafeClasico cafe: CreacionDeProductos.cafesClasicos.values()) {
-            System.out.println("\t" + contador + ".  " + cafe.getNombre());
-            contador++;
-        }
-        // Impresion de Cafes de Metodo
-        System.out.println("-- Cafe de Metodo --");
-        for (CafeDeMetodo cafe: CreacionDeProductos.cafesDeMetodo.values()) {
-            System.out.println("\t" + contador + ".  " + cafe.getNombre());
-            contador ++;
-        }
-    }
-
-    private static void imprimirOpcionesDeBebida(Cafe cafe){
-        addItem(new OrdenItem(cafe));
-        boolean ciclo = false;
-        int response = 0;
-        Scanner scanner = new Scanner(System.in);
-
-        // Pregunta por tamaño de la bebida
-        System.out.println("El tamaño de tu cafe " + cafe.getNombre() + " lo gustas Sencillo o Doble :");
-        System.out.println("1. Sencillo");
-        System.out.println("2. Doble");
-        do {
-            response = Integer.parseInt(scanner.nextLine());
-            switch (response){
-                case 1:
-                    ciclo = false;
-                    break;
-                case 2:
-                    Productos pr = (orderList.get(orderList.size()-1).getProducto());   // ###########################
-                    //pr.
-                    ciclo = false;
-                    break;
-                default:
-                    System.out.println("Introduce opcion valida");
-                    ciclo = true;
-            }
-        }while (ciclo);
-
-        // Pregunta por si gusta topping
-        if (CaracteristicasDeCafe.valueOf(cafe.getNombre()).getTipoDeCafe() == TiposDeCafe.CAFE_CLASICO){
-            System.out.println("¿Gustas agregar algun topping?");
-            ArrayList<ToppingsBebidas> toppingsElegidos = new ArrayList<>();
-            do {
-                for (int i=0; i<ToppingsBebidas.values().length; i++){
-                    int indice = i+1;
-                    if (!toppingsElegidos.contains(ToppingsBebidas.values()[i]))
-                        System.out.println(indice + ". " + ToppingsBebidas.values()[i]);
+        // Impresion de Comida
+        System.out.println("## Comida ##");
+        for (TiposDeComida tiposDeComida: Constantes.TiposDeComida.values()){
+            System.out.println("  " + tiposDeComida.toString());
+            for (Comida comida: CreacionDeProductos.comidaTreeMap.values()) {
+                if (comida.getTipoDeComida() == tiposDeComida){
+                    menu.add(comida);
+                    System.out.println("\t" + contador + ".  " + comida.getNombre() + " - " + comida.getDescripcion());
+                    contador++;
                 }
-                System.out.println("0. Ninguno, gracias.");
-                response = Integer.parseInt(scanner.nextLine());
-                response--;
-                if (response>=0 && response<=(ToppingsBebidas.values().length-1)){
-                    orderList.get(orderList.size()-1).getProducto().addTopping(ToppingsBebidas.values()[response]);
-                    toppingsElegidos.add(ToppingsBebidas.values()[response]);
-                    if (toppingsElegidos.size() < ToppingsBebidas.values().length){
-                        System.out.println("¿Te gustaria agregar otro?");
-                        System.out.println("1. Si");
-                        System.out.println("0. No");
-                        response = Integer.parseInt(scanner.nextLine());
-                        if (response == 1) ciclo = true;
-                    } else ciclo = false;
-                } else ciclo = false;
-            }while (ciclo);
-        } else System.out.println("Los cafes de metodo no llevan toppings, solo los clasicos");
+            }
+        }
+        // Impresion de Bebida
+        System.out.println("## Bebida ##");
+        for (TiposDeBebida tiposDeBebida: Constantes.TiposDeBebida.values()){
+            System.out.println("  " + tiposDeBebida.toString());
+            for (Bebida bebida: CreacionDeProductos.bebidaTreeMap.values()) {
+                if (bebida.getTipoDeBebida() == tiposDeBebida){
+                    menu.add(bebida);
+                    System.out.println("\t" + contador + ".  " + bebida.getNombre() + " - " + bebida.getDescripcion());
+                    contador++;
+                }
+            }
+        }
+    }
 
-        // Pregunta por si gusta que lo enfrien
-        System.out.println("¿Gustarias que enfriemos tu bebida?");
-        System.out.println("1. Si");
-        System.out.println("0. No");
-        response = Integer.parseInt(scanner.nextLine());
+    private static boolean quiereOtroProducto(){
+        boolean eleccion = false;
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("¿Gusta otro producto?");
+        System.out.println("1. Si, por favor");
+        System.out.println("0. No, gracias");
+        int response = Integer.parseInt(scanner.nextLine());
+        boolean ciclo =false;
         do {
             switch (response){
                 case 1:
-                    break;
+                    eleccion = true;
+                    ciclo = false;
+                break;
                 case 0:
-                    break;
+                    eleccion =  false;
+                    ciclo = false;
+                break;
                 default:
-                    System.out.println("Introduce opcion valida");
+                    System.out.println("Inserta opcion deseada");
                     ciclo = true;
             }
         }while (ciclo);
-
-
-
+        return eleccion;
     }
 
 
-    /*
-        Funciones para la orderList,  agregar y borrar OrderItem
-        y retornar un string del OrderItem con todas sus caracteristicas en una linea
-     */
-    private static void addItem(OrdenItem orderItem){
-        orderList.add(orderItem);
-    }
-
-    private static void deleteItem(int indexItem){
-        orderList.remove(indexItem);
-    }
-
-    private static String getListString(){
-        StringBuilder stringBuilder = new StringBuilder();
-
-        for (OrdenItem orderItem: orderList) {
-
-            stringBuilder.append(orderItem.getCantidadDeProductos()).append("\t")
-                    .append(orderItem.getProducto().getNombre()).append(" \t");
-
-            if (orderItem.getProducto().isTamanioDoble()){
-                stringBuilder.append(" Doble ");
-            }
-
-            if(orderItem.getProducto().getToppings() != null){
-                stringBuilder.append(" toppings: ").append(orderItem.getProducto().getToppingsString()).append("\t");
-            }else stringBuilder.append("\t\t");
-
-            stringBuilder.append(orderItem.getCostoItem());
-
-
-        }
-
-        return stringBuilder.toString();
-    }
 
 
 }

@@ -4,8 +4,6 @@ import constantes.Constantes;
 
 public interface IBebidas {
 
-    void enfriar();
-
-    void duplicarTamanio();
+    abstract void duplicarTamanio();
 
 }

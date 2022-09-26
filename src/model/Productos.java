@@ -11,93 +11,77 @@ import java.util.ArrayList;
  */
 
 public abstract class Productos {
-    private String  nombre;
+    private final String  nombre;
     private float   costo;
+    private final TiposDeProductos tipoDeProductos;
+    private final TiposDeComida tipoDeComida;
+    private final TiposDeBebida tipoDeBebida;
     private int     tiempoDeElaboracion;
-    private TiposDeProductos    tiposDeProductos;
-    private String  descripcion;
+    private final String  descripcion;
     private ArrayList<String>   toppings = new ArrayList<>();
     boolean istamanioDoble = false;     // Variable para identificar el producto que el cliente quiere con doble porcion
 
+
     // Constructor
-    public Productos(String nombre, Float costo, int tiempoDeElaboracion, TiposDeProductos tiposDeProductos) {
+    public Productos(String nombre, Float costo, TiposDeProductos tipoDeProductos, TiposDeComida tipoDeComida, TiposDeBebida tipoDeBebida,  int tiempoDeElaboracion, String descripcion) {
         this.nombre = nombre;
         this.costo = costo;
         this.tiempoDeElaboracion = tiempoDeElaboracion;
-        this.tiposDeProductos = tiposDeProductos;
+        this.tipoDeProductos = tipoDeProductos;
+        this.tipoDeComida = tipoDeComida;
+        this.tipoDeBebida = tipoDeBebida;
+        this.descripcion = descripcion;
     }
 
     // Metodos para agregar toppings al producto. Sobrecarga dependiendo si es comida o bebida
+    public void addTopping(ToppingsComidas toppingsComida) {
+        this.toppings.add(toppingsComida.toString());
+    }
+    public void addTopping(ToppingsPostres toppingsPostre) {
+        this.toppings.add(toppingsPostre.toString());
+    }
     public void addTopping(ToppingsBebidas toppingBebida) {
         this.toppings.add(toppingBebida.toString());
-    }
-    public void addTopping(ToppingsComida toppingsComida) {
-        this.toppings.add(toppingsComida.toString());
     }
 
     /*
         Metodo para imprimir el producto junto con sus caracteristicas
         descricion y toppings al no estar en el constructor, generamos condicionales en caso de ser null
+        implementado en cada hijo
      */
-    public void imprimirProducto(){
-        System.out.println(nombre + " -      $" + costo);
-        System.out.println("Tiempo de elaboración: " + tiempoDeElaboracion + "minutos");
-        if (descripcion != null) {
-            System.out.println("Descripción: " + descripcion);
-        }
-        if (toppings != null) {
-            System.out.print("Toppings: ");
-            for (String topping: toppings) {
-                System.out.print(topping + " / ");
-            }
-        }
+    public abstract  void imprimirProducto();
 
-    }
+    public abstract void duplicarTamanio();
 
-    public void setCosto(float costo){
-        this.costo = costo;
-    }
 
-    public float getCosto(){
-        return costo;
-    }
-
-    public int getTiempoDeElaboracion() {
-        return tiempoDeElaboracion;
-    }
-
-    public void setTiempoDeElaboracion(int tiempoDeElaboracion) {
-        this.tiempoDeElaboracion = tiempoDeElaboracion;
-    }
-
+    // Getters
     public String getNombre() {
         return nombre;
     }
-
-    public TiposDeProductos getTiposDeProductos() {
-        return tiposDeProductos;
+    public float getCosto(){
+        return costo;
     }
-
+    public TiposDeProductos getTipoDeProductos() {
+        return tipoDeProductos;
+    }
+    public TiposDeComida getTipoDeComida() {
+        return tipoDeComida;
+    }
+    public TiposDeBebida getTipoDeBebida() {
+        return tipoDeBebida;
+    }
+    public int getTiempoDeElaboracion() {
+        return tiempoDeElaboracion;
+    }
     public String getDescripcion() {
         return descripcion;
     }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
     public boolean isTamanioDoble() {
         return istamanioDoble;
     }
-
-    public void setIstamanioDoble(boolean istamanioDoble) {
-        this.istamanioDoble = istamanioDoble;
-    }
-
     public ArrayList<String> getToppings() {
         return toppings;
     }
-
     public String getToppingsString() {
         StringBuilder toppingsS = new StringBuilder();
         for (String topping: toppings) {
@@ -105,13 +89,28 @@ public abstract class Productos {
         }
         return toppingsS.toString();
     }
-    public void addToppingBebida(EnumConstant topping) {
-        this.toppings.add(topping.toString());
-    }
 
-    public void deleteToppingBebida(int itemTopping){
+    // Setters
+    protected void setCosto(float costo){
+        this.costo = costo;
+    }
+    protected void setTiempoDeElaboracion(int tiempoDeElaboracion) {
+        this.tiempoDeElaboracion = tiempoDeElaboracion;
+    }
+    protected void setIstamanioDoble() {
+        this.istamanioDoble = true;
+    }
+    protected void deleteToppingBebida(int itemTopping){
         this.toppings.remove(itemTopping);
     }
+
+
+
+
+
+
+
+
 
 }
 
