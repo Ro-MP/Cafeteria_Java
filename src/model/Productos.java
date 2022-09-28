@@ -1,7 +1,5 @@
 package model;
 
-import com.sun.xml.internal.bind.v2.model.core.EnumConstant;
-import constantes.Constantes;
 import constantes.Constantes.*;
 
 import java.util.ArrayList;
@@ -18,7 +16,7 @@ public abstract class Productos {
     private final TiposDeBebida tipoDeBebida;
     private int     tiempoDeElaboracion;
     private final String  descripcion;
-    private ArrayList<String>   toppings = new ArrayList<>();
+    private final ArrayList<String>   toppings = new ArrayList<>();
     boolean istamanioDoble = false;     // Variable para identificar el producto que el cliente quiere con doble porcion
 
 
@@ -26,11 +24,20 @@ public abstract class Productos {
     public Productos(String nombre, Float costo, TiposDeProductos tipoDeProductos, TiposDeComida tipoDeComida, TiposDeBebida tipoDeBebida,  int tiempoDeElaboracion, String descripcion) {
         this.nombre = nombre;
         this.costo = costo;
-        this.tiempoDeElaboracion = tiempoDeElaboracion;
         this.tipoDeProductos = tipoDeProductos;
         this.tipoDeComida = tipoDeComida;
         this.tipoDeBebida = tipoDeBebida;
+        this.tiempoDeElaboracion = tiempoDeElaboracion;
         this.descripcion = descripcion;
+    }
+    public Productos(Productos producto){
+        this.nombre = producto.getNombre();
+        this.costo = producto.costo;
+        this.tipoDeProductos = producto.tipoDeProductos;
+        this.tipoDeComida = producto.tipoDeComida;
+        this.tipoDeBebida = producto.tipoDeBebida;
+        this.tiempoDeElaboracion = producto.tiempoDeElaboracion;
+        this.descripcion = producto.descripcion;
     }
 
     // Metodos para agregar toppings al producto. Sobrecarga dependiendo si es comida o bebida
@@ -49,7 +56,6 @@ public abstract class Productos {
         descricion y toppings al no estar en el constructor, generamos condicionales en caso de ser null
         implementado en cada hijo
      */
-    public abstract  void imprimirProducto();
 
     public abstract void duplicarTamanio();
 
@@ -85,7 +91,7 @@ public abstract class Productos {
     public String getToppingsString() {
         StringBuilder toppingsS = new StringBuilder();
         for (String topping: toppings) {
-            toppingsS.append(topping.toString()).append(" ");
+            toppingsS.append(topping).append(" ");
         }
         return toppingsS.toString();
     }
@@ -103,6 +109,7 @@ public abstract class Productos {
     protected void deleteToppingBebida(int itemTopping){
         this.toppings.remove(itemTopping);
     }
+
 
 
 

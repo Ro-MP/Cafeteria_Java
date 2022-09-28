@@ -9,11 +9,11 @@ public class Comida extends Productos {
     public Comida(String nombre, Float costo, TiposDeProductos tipoDeProductos, TiposDeComida tipoDeComida, TiposDeBebida tipoDeBebida, int tiempoDeElaboracion, String descripcion) {
         super(nombre, costo, tipoDeProductos, tipoDeComida, tipoDeBebida, tiempoDeElaboracion, descripcion);
     }
-
-    @Override
-    public void imprimirProducto() {
-
+    public Comida(Productos producto){
+        super(producto);
     }
+
+
 
     @Override
     public void duplicarTamanio() {

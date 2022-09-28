@@ -1,12 +1,9 @@
 package ui;
 
-import com.sun.xml.internal.bind.v2.model.core.EnumConstant;
 import constantes.Constantes;
 import model.Productos;
 import model.bebidas.Bebida;
 import model.comida.Comida;
-import model.order.OrdenItem;
-
 import constantes.Constantes.*;
 import model.order.OrderList;
 
@@ -21,8 +18,7 @@ public class UIMenu {
 
     public static void showMenu() {
 
-        int response = 0;
-        int indexAllOrderLists = 0;
+        int response;
 
         // Bienvenida y despliegue de productos
         System.out.println("## Bienvenido a  Cachito de Coco Cafe ##");
@@ -81,7 +77,7 @@ public class UIMenu {
         System.out.println("1. Si, por favor");
         System.out.println("0. No, gracias");
         int response = Integer.parseInt(scanner.nextLine());
-        boolean ciclo =false;
+        boolean ciclo;
         do {
             switch (response){
                 case 1:

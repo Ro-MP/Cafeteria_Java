@@ -1,14 +1,13 @@
 package model.order;
 
 import constantes.Constantes;
-import model.bebidas.Bebida;
 import ui.UIMenu;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class OrderList {
-    private ArrayList<OrdenItem> orderList = new ArrayList<>();
+    private final ArrayList<OrdenItem> orderList = new ArrayList<>();
 
 
     public void addOrderItem (int opcionSelecionada) {
@@ -18,8 +17,8 @@ public class OrderList {
 
 
     public void imprimirOpcionesDeBebida(){
-        boolean ciclo = false;
-        int response = 0;
+        boolean ciclo;
+        int response;
         Scanner scanner = new Scanner(System.in);
 
         // Pregunta si le gustaría Doble el tamaño de su bebida
@@ -70,8 +69,7 @@ public class OrderList {
                             System.out.println("1. Si");
                             System.out.println("0. No");
                             response = Integer.parseInt(scanner.nextLine());
-                            if (response == 1) ciclo = true;
-                            else ciclo = false;
+                            ciclo = response == 1;
                         } else ciclo = false;
                     } else ciclo = false;
                 }while (ciclo);
@@ -97,8 +95,7 @@ public class OrderList {
                             System.out.println("1. Si");
                             System.out.println("0. No");
                             response = Integer.parseInt(scanner.nextLine());
-                            if (response == 1) ciclo = true;
-                            else ciclo = false;
+                            ciclo = response == 1;
                         } else ciclo = false;
                     } else ciclo = false;
                 }while (ciclo);
@@ -125,8 +122,7 @@ public class OrderList {
                         System.out.println("1. Si");
                         System.out.println("0. No");
                         response = Integer.parseInt(scanner.nextLine());
-                        if (response == 1) ciclo = true;
-                        else ciclo = false;
+                        ciclo = response == 1;
                     } else ciclo = false;
                 } else ciclo = false;
             }while (ciclo);

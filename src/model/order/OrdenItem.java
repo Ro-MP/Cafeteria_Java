@@ -1,17 +1,22 @@
 package model.order;
 
+import constantes.Constantes;
 import model.Productos;
+import model.bebidas.Bebida;
+import model.comida.Comida;
 
 public class OrdenItem {
 
     // Atributos de Order Item
     private final Productos producto;
     private int unidadesDeProductos = 1;
-    private float costoTotal;
 
     // Constructor
     public OrdenItem(Productos producto) {
-        this.producto = producto;
+        if (producto.getTipoDeProductos() == Constantes.TiposDeProductos.COMIDA){
+            this.producto = new Comida(producto);
+        } else this.producto = new Bebida(producto);
+
     }
 
     // Solo getter de producto ya que no se podrá modificar, si se quiere otro producto se elije,
